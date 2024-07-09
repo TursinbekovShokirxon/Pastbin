@@ -1,0 +1,6 @@
+@Pastbin.UI_HostAddress = http://localhost:5110
+
+GET {{Pastbin.UI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
