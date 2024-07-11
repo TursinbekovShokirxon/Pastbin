@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Pastbin.Domain.Entities
 {
-    public class Post
+    public class Comment
     {
         public int Id { get; set; }
-        public string HashUrl{ get; set; }
-        public string UrlAWS{ get; set; }
-        public User UserId{ get; set; }
-        public List<Comment> Comments{ get; set; }
+        public string Text { get; set; }
+        public Post Post{ get; set; }
     }
 }
