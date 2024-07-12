@@ -16,7 +16,9 @@ namespace Pastbin.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ICommentService,CommentService>();   
-
+            services.AddScoped<IPostService,PostService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFileService, FileService>();
             //Adding config for connect to s3 
             services.AddDefaultAWSOptions(configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();

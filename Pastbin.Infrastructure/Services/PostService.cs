@@ -6,7 +6,7 @@ namespace Pastbin.Infrastructure.Services
     {
         public Task<Post> CreateAsync(Post entity,string Text)
         {
-
+            
         }
         public Task<bool> DeleteAsync(int Id)
         {
