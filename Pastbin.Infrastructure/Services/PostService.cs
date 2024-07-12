@@ -38,13 +38,16 @@ namespace Pastbin.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Post>> GetAllFromUsernameAsync(string Username)
+        public async Task<IEnumerable<Post>> GetAllFromUsernameAsync(string username)
         {
-            var User = await _db.Users.FirstOrDefaultAsync(x => x.Username == Username);
-            if (User == null) return new List<Post>();
-            return User.Posts;
-        }
+            var user = await _db.Users
+            .Include(u => u.Posts) 
+            .FirstOrDefaultAsync(u => u.Username == username);
 
+            if (user == null) return new List<Post>(); 
+
+            return user.Posts;
+        }
         public async Task<IEnumerable<Post>> GetAllAsync()
         {
             var Posts = _db.Posts.ToList();
