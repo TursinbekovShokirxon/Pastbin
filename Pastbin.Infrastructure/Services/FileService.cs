@@ -13,7 +13,6 @@ namespace Pastbin.Infrastructure.Services
         {
             _s3Client = s3Client;
         }
-
         public async Task<UploadFileResponse> UploadFileAsync(string bucketName,Stream fileStream,string fileName,int? expireHour, string? prefix)
         {
             var bucketExists = await _s3Client.DoesS3BucketExistAsync(bucketName);
@@ -106,5 +105,6 @@ namespace Pastbin.Infrastructure.Services
             if (deletedObject.HttpStatusCode == System.Net.HttpStatusCode.OK) return true;
             return false;
         }
+
     }
 }

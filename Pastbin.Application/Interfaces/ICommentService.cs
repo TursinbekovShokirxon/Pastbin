@@ -9,6 +9,6 @@ namespace Pastbin.Application.Interfaces
 {
     public interface ICommentService:ICRUDService<Comment>
     {
-     // public Task<string> createAsync(Comment comment,int userId);
+        public Task<string> createAsync(Comment comment, int userId);
     }
 }

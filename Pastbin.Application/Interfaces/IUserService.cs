@@ -9,6 +9,7 @@ namespace Pastbin.Application.Interfaces
 {
     public interface IUserService:ICRUDService<User>
     {
+        Task<User> CreateAsync(User entity);
         public Task<User> GetByUsername(string username);
     }
 }

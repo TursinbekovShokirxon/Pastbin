@@ -45,9 +45,13 @@ namespace Pastbin.Infrastructure.Services
             return user;
 
         }
-        public async Task<User?> GetByUsername(string username)
+        public async Task<User> GetByUsername(string username)
         {
             User? User = await _db.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
+            if (User == null)
+            {
+                throw new Exception($"User: {username} not found.");
+            }
             return User;
         }
 
