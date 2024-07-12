@@ -11,8 +11,8 @@ namespace Pastbin.Application.Interfaces
     {
         Task<Post> CreateAsync(Post entity,string text);
         Task<IEnumerable<Post>> GetAllAsync();
-        Task<Post> GetByIdAsync();
-        Task<Post> UpdateAsync(int id);
+        Task<Post> GetByIdAsync(int id);
+        Task<Post> UpdateAsync(Post entity);
         Task<bool> DeleteAsync(int id);
     }
 }
