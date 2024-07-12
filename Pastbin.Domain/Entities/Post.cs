@@ -13,6 +13,6 @@ namespace Pastbin.Domain.Entities
         public string UrlAWS{ get; set; }
         public int ExpireHour { get; set; }
         public User UserId{ get; set; }
-        public List<Comment> Comments{ get; set; }
+        //public List<Comment> Comments{ get; set; }
     }
 }

@@ -7,40 +7,58 @@ namespace Pastbin.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        public readonly PastbinDbContext _pastbinDb;
+        public readonly PastbinDbContext _db;
         public UserService(PastbinDbContext pastbinDb)
         {
-            _pastbinDb = pastbinDb;
+            _db = pastbinDb;
         }
-        public Task<User> CreateAsync(User entity)
+        public async Task<User> CreateAsync(User user)
         {
-            throw new NotImplementedException();
+            await _db.Users.AddAsync(user);
+            await _db.SaveChangesAsync();
+            return user;
         }
 
-        public Task<bool> DeleteAsync(int Id)
+        public async Task<bool> DeleteAsync(int Id)
         {
-            throw new NotImplementedException();
+            User? user = await _db.Users.FirstOrDefaultAsync(u => u.Id == Id);
+            if (user == null)
+            {
+                return false;
+            }
+            _db.Remove(user);
+            await _db.SaveChangesAsync();
+            return true;
         }
 
-        public Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _db.Users.ToListAsync();
         }
-
-        public Task<User> GetByIdAsync()
+        public async Task<User> GetByIdAsync(int Id)
         {
-            throw new NotImplementedException();
-        }
+            User? user =await _db.Users.FirstOrDefaultAsync(x=> x.Id == Id);
+            if (user == null)
+            {
+                throw new Exception($"User with Id {Id} not found.");
+            }
+            return user;
 
+        }
         public async Task<User?> GetByUsername(string username)
         {
-            User? User = await _pastbinDb.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
+            User? User = await _db.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
             return User;
         }
 
-        public Task<User> UpdateAsync(int Id)
-        {
-            throw new NotImplementedException();
+        public async Task<User> UpdateAsync(User user){
+            _db.Users.Update(user);
+            int executeRows = await _db.SaveChangesAsync();
+            if (executeRows > 0)
+            {
+                return user;
+            }
+            throw new Exception($"User with Id {user.Id} not updated.");
         }
     }
 }

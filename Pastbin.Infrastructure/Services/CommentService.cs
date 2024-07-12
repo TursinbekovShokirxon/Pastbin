@@ -30,12 +30,12 @@ namespace Pastbin.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Comment> GetByIdAsync()
+        public Task<Comment> GetByIdAsync(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Comment> UpdateAsync(int Id)
+        public Task<Comment> UpdateAsync(Comment entity)
         {
             throw new NotImplementedException();
         }
