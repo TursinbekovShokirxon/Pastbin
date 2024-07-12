@@ -1,10 +1,8 @@
 ﻿using Amazon.S3.Model;
 using Amazon.S3;
-using Microsoft.AspNetCore.Http;
 using Pastbin.Domain.Models;
 using Pastbin.Domain.Models.DTO;
 using Pastbin.Application.Interfaces;
-using System.IO;
 
 namespace Pastbin.Infrastructure.Services
 {
@@ -30,7 +28,7 @@ namespace Pastbin.Infrastructure.Services
                 BucketName = bucketName,
                 Key = string.IsNullOrEmpty(prefix) ? fileName : $"{prefix}/{fileName}",
                 InputStream = fileStream,
-                ContentType = "text/plain" // Установите соответствующий MIME-тип
+                ContentType = "text/plain" 
             };
 
             await _s3Client.PutObjectAsync(putRequest);

@@ -7,16 +7,12 @@ namespace Pastbin.Infrastructure.Services
 {
     public class PostService : IPostService
     {
-        public PastbinDbContext _db;
-
-        public PostService(PastbinDbContext db)
-        {
-            _db = db;
-        }
 
         private readonly IFileService _fileService;
-        public PostService(IFileService fileService)
+        private readonly PastbinDbContext _db;
+        public PostService(IFileService fileService,PastbinDbContext db)
         {
+            _db= db;    
             _fileService = fileService;
         }
         public async Task<Post> CreateAsync(Post entity, string text)
@@ -32,6 +28,7 @@ namespace Pastbin.Infrastructure.Services
                 entity.UrlAWS = response.UploadedFilePath;
                 entity.HashUrl = string.Join("", HashGenerator.sha256_hash(response.UploadedFilePath).Select(x => x).Take(40));
             }
+            await _db.Posts.AddAsync(entity);
             return entity;
         }
         public Task<bool> DeleteAsync(int id)
@@ -44,12 +41,12 @@ namespace Pastbin.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetByIdAsync(int id)
+        public async Task<Post> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Post> UpdateAsync(Post entity)
+        public Task<Post> UpdateAsync(Post post)
         {
             throw new NotImplementedException();
         }

@@ -27,7 +27,7 @@ namespace Pastbin.UI.Controllers
             Post post=new Post() 
             {
             ExpireHour = postDTO.ExpireHour,
-            UserId= user,
+            User= user,
             };
            var response = await _postService.CreateAsync(post,postDTO.Text);
             return Ok($"File {response.HashUrl}");
