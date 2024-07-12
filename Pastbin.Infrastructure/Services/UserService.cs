@@ -20,12 +20,12 @@ namespace Pastbin.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<User>> GetAll()
+        public Task<IEnumerable<User>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> GetById()
+        public Task<User> GetByIdAsync()
         {
             throw new NotImplementedException();
         }
