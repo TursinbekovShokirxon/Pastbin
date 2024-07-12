@@ -7,12 +7,6 @@ namespace Pastbin.Infrastructure.Services
 {
     public class PostService : IPostService
     {
-        public PastbinDbContext _db;
-
-        public PostService(PastbinDbContext db)
-        {
-            _db = db;
-        }
 
         private readonly IFileService _fileService;
         private readonly PastbinDbContext _db;
@@ -47,12 +41,12 @@ namespace Pastbin.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetByIdAsync(int id)
+        public async Task<Post> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Post> UpdateAsync(Post entity)
+        public Task<Post> UpdateAsync(Post post)
         {
             throw new NotImplementedException();
         }

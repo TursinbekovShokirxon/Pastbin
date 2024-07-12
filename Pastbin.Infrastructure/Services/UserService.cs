@@ -26,7 +26,7 @@ namespace Pastbin.Infrastructure.Services
             {
                 return false;
             }
-            _db.Remove(user);
+            _db.Users.Remove(user);
             await _db.SaveChangesAsync();
             return true;
         }

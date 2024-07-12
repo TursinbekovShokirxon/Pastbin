@@ -9,10 +9,10 @@ namespace Pastbin.Application.Interfaces
 {
     public interface IPostService
     {
-        Task<Post> CreateAsync(Post entity,string text);
-        Task<IEnumerable<Post>> GetAllAsync();
-        Task<Post> GetByIdAsync(int id);
-        Task<Post> UpdateAsync(Post entity);
-        Task<bool> DeleteAsync(int id);
+       public Task<Post> CreateAsync(Post entity,string text);
+        public Task<IEnumerable<Post>> GetAllAsync();
+        public Task<Post> GetByIdAsync(int id);
+        public Task<Post> UpdateAsync(Post entity);
+        public Task<bool> DeleteAsync(int id);
     }
 }

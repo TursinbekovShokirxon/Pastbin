@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace Pastbin.Domain.Entities
         public string HashUrl{ get; set; }
         public string UrlAWS{ get; set; }
         public int ExpireHour { get; set; }
-        public User UserId{ get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
         //public List<Comment> Comments{ get; set; }
     }
 }
