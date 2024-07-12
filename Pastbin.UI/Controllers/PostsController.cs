@@ -29,9 +29,39 @@ namespace Pastbin.UI.Controllers
             ExpireHour = postDTO.ExpireHour,
             User= user,
             };
+
            var response = await _postService.CreateAsync(post,postDTO.Text);
-            return Ok($"File {response.HashUrl}");
+            return Ok(response.HashUrl);
         }
 
+        [HttpGet("{keyword}")]
+        public async Task<IActionResult> GetUrlsForKeyword(string keyword)
+        {
+            var posts =  _postService.GetAllAsync().Result.ToList();
+                var urls= posts.Where(k => k.HashUrl == keyword)
+                        .Select(k =>k.UrlAWS)
+                        .ToList();
+
+            if (urls == null || urls.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(urls);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllFromUsernameAsync(string Username)
+        {
+            var Posts=await _postService.GetAllFromUsernameAsync(Username);
+            if(Posts==null) return NotFound("in db not exist");
+            return Ok(Posts);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            return Ok(_postService.GetAllAsync());
+        }
     }
 }

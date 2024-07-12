@@ -1,4 +1,5 @@
-﻿using Pastbin.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Pastbin.Application.Interfaces;
 using Pastbin.Application.Services;
 using Pastbin.Domain.Entities;
 using Pastbin.Infrastructure.DataAccess;
@@ -10,9 +11,9 @@ namespace Pastbin.Infrastructure.Services
 
         private readonly IFileService _fileService;
         private readonly PastbinDbContext _db;
-        public PostService(IFileService fileService,PastbinDbContext db)
+        public PostService(IFileService fileService, PastbinDbContext db)
         {
-            _db= db;    
+            _db = db;
             _fileService = fileService;
         }
         public async Task<Post> CreateAsync(Post entity, string text)
@@ -29,6 +30,7 @@ namespace Pastbin.Infrastructure.Services
                 entity.HashUrl = string.Join("", HashGenerator.sha256_hash(response.UploadedFilePath).Select(x => x).Take(40));
             }
             await _db.Posts.AddAsync(entity);
+            await _db.SaveChangesAsync();
             return entity;
         }
         public Task<bool> DeleteAsync(int id)
@@ -36,14 +38,22 @@ namespace Pastbin.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Post>> GetAllAsync()
+        public async Task<IEnumerable<Post>> GetAllFromUsernameAsync(string Username)
         {
-            throw new NotImplementedException();
+            var User = await _db.Users.FirstOrDefaultAsync(x => x.Username == Username);
+            if (User == null) return new List<Post>();
+            return User.Posts;
+        }
+
+        public async Task<IEnumerable<Post>> GetAllAsync()
+        {
+            var Posts = _db.Posts.ToList();
+            return Posts;
         }
 
         public async Task<Post> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _db.Posts.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<Post> UpdateAsync(Post post)

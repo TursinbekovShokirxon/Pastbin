@@ -50,7 +50,7 @@ namespace Pastbin.Infrastructure.Services
             User? User = await _db.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
             if (User == null)
             {
-                throw new Exception($"User: {username} not found.");
+                return null;
             }
             return User;
         }
