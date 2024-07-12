@@ -1,14 +1,17 @@
 ﻿using Pastbin.Application.Interfaces;
 using Pastbin.Application.Services;
 using Pastbin.Domain.Entities;
+using Pastbin.Infrastructure.DataAccess;
 using System.Text;
 namespace Pastbin.Infrastructure.Services
 {
     public class PostService : IPostService
     {
         private readonly IFileService _fileService;
-        public PostService(IFileService fileService)
+        private readonly PastbinDbContext _db;
+        public PostService(IFileService fileService,PastbinDbContext db)
         {
+            _db= db;    
             _fileService = fileService;
         }
         public async Task<Post> CreateAsync(Post entity, string text)
@@ -24,6 +27,7 @@ namespace Pastbin.Infrastructure.Services
                 entity.UrlAWS = response.UploadedFilePath;
                 entity.HashUrl = string.Join("", HashGenerator.sha256_hash(response.UploadedFilePath).Select(x => x).Take(40));
             }
+            await _db.Posts.AddAsync(entity);
             return entity;
         }
         public Task<bool> DeleteAsync(int id)
