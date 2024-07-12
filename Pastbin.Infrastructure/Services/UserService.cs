@@ -2,20 +2,15 @@
 using Pastbin.Application.Interfaces;
 using Pastbin.Domain.Entities;
 using Pastbin.Infrastructure.DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pastbin.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        public PastbinDbContext _db;
-        public UserService(PastbinDbContext pastbinDbContext)
+        public readonly PastbinDbContext _db;
+        public UserService(PastbinDbContext pastbinDb)
         {
-            _db = pastbinDbContext;
+            _db = pastbinDb;
         }
         public async Task<User> CreateAsync(User user)
         {
@@ -36,21 +31,11 @@ namespace Pastbin.Infrastructure.Services
             return true;
         }
 
-<<<<<<< HEAD
-
         public async Task<IEnumerable<User>> GetAllAsync()
-=======
-        public Task<IEnumerable<User>> GetAllAsync()
->>>>>>> e217a2eb481cdce2fd05e67703387f60b39b7f03
         {
             return await _db.Users.ToListAsync();
         }
-
-<<<<<<< HEAD
         public async Task<User> GetByIdAsync(int Id)
-=======
-        public Task<User> GetByIdAsync()
->>>>>>> e217a2eb481cdce2fd05e67703387f60b39b7f03
         {
             User? user =await _db.Users.FirstOrDefaultAsync(x=> x.Id == Id);
             if (user == null)
@@ -60,14 +45,13 @@ namespace Pastbin.Infrastructure.Services
             return user;
 
         }
-
-        public Task<User> GetByUsername(string username)
+        public async Task<User?> GetByUsername(string username)
         {
-            throw new NotImplementedException();
+            User? User = await _db.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
+            return User;
         }
 
-        public async Task<User> UpdateAsync(User user)
-        {
+        public async Task<User> UpdateAsync(User user){
             _db.Users.Update(user);
             int executeRows = await _db.SaveChangesAsync();
             if (executeRows > 0)

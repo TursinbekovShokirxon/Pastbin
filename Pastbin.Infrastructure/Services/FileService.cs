@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Pastbin.Domain.Models;
 using Pastbin.Domain.Models.DTO;
 using Pastbin.Application.Interfaces;
+using System.IO;
 
 namespace Pastbin.Infrastructure.Services
 {
@@ -15,7 +16,7 @@ namespace Pastbin.Infrastructure.Services
             _s3Client = s3Client;
         }
 
-        public async Task<UploadFileResponse> UploadFileAsync(string bucketName,IFormFile file, string? prefix, int? expireDay)
+        public async Task<UploadFileResponse> UploadFileAsync(string bucketName,Stream fileStream,string fileName,int? expireHour, string? prefix)
         {
             var bucketExists = await _s3Client.DoesS3BucketExistAsync(bucketName);
 
@@ -24,33 +25,28 @@ namespace Pastbin.Infrastructure.Services
             Message = string.Empty,
             UploadedFilePath=null
             };
-            
-            var request = new PutObjectRequest()
+
+            var putRequest = new PutObjectRequest
             {
                 BucketName = bucketName,
-                Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
-                InputStream = file.OpenReadStream(),
-                ContentType = file.ContentType
+                Key = string.IsNullOrEmpty(prefix) ? fileName : $"{prefix}/{fileName}",
+                InputStream = fileStream,
+                ContentType = "text/plain" // Установите соответствующий MIME-тип
             };
 
-            if (expireDay.HasValue)
-            {
-                request.Metadata.Add("x-amz-meta-ttl", expireDay.Value.ToString());
-            }
-
-            await _s3Client.PutObjectAsync(request);
+            await _s3Client.PutObjectAsync(putRequest);
 
             var urlRequest = new GetPreSignedUrlRequest
             {
                 BucketName = bucketName,
-                Key = request.Key,
-                Expires = DateTime.UtcNow.AddMinutes(60) // Set URL expiration time
+                Key = putRequest.Key,
+                Expires = DateTime.UtcNow.AddHours(expireHour.Value) // Set URL expiration time
             };
             string url = _s3Client.GetPreSignedURL(urlRequest);
 
             return new UploadFileResponse()
             {
-            Message=$"File {request.Key} is uploaded",
+            Message=$"File {putRequest.Key} is uploaded",
             Success = true,
             UploadedFilePath=url
             };
