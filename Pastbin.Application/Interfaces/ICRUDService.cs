@@ -10,8 +10,8 @@ namespace Pastbin.Application.Interfaces
     public interface ICRUDService<T>
     {
         Task<T> CreateAsync(T entity);
-        Task<IEnumerable<T>> GetAll();
-        Task<T> GetById(int Id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(int Id);
         Task<T> UpdateAsync(T entity);
         Task<bool> DeleteAsync(int Id);
     }

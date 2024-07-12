@@ -36,12 +36,13 @@ namespace Pastbin.Infrastructure.Services
             return true;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _db.Users.ToListAsync();
         }
 
-        public async Task<User> GetById(int Id)
+        public async Task<User> GetByIdAsync(int Id)
         {
             User? user =await _db.Users.FirstOrDefaultAsync(x=> x.Id == Id);
             if (user == null)
