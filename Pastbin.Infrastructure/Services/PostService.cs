@@ -4,11 +4,10 @@ namespace Pastbin.Infrastructure.Services
 {
     public class PostService : IPostService
     {
-        public Task<Post> CreateAsync(Post entity)
+        public Task<Post> CreateAsync(Post entity,string Text)
         {
-            throw new NotImplementedException();
-        }
 
+        }
         public Task<bool> DeleteAsync(int Id)
         {
             throw new NotImplementedException();

@@ -11,6 +11,7 @@ namespace Pastbin.Domain.Entities
         public int Id { get; set; }
         public string HashUrl{ get; set; }
         public string UrlAWS{ get; set; }
+        public int ExpireHour { get; set; }
         public User UserId{ get; set; }
         public List<Comment> Comments{ get; set; }
     }
