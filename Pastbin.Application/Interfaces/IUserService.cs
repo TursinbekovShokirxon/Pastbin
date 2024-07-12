@@ -9,6 +9,6 @@ namespace Pastbin.Application.Interfaces
 {
     public interface IUserService:ICRUDService<User>
     {
-
+        public Task<User> GetByUsername(string username);
     }
 }

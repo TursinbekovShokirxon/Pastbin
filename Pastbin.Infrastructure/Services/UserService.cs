@@ -36,13 +36,21 @@ namespace Pastbin.Infrastructure.Services
             return true;
         }
 
+<<<<<<< HEAD
 
         public async Task<IEnumerable<User>> GetAllAsync()
+=======
+        public Task<IEnumerable<User>> GetAllAsync()
+>>>>>>> e217a2eb481cdce2fd05e67703387f60b39b7f03
         {
             return await _db.Users.ToListAsync();
         }
 
+<<<<<<< HEAD
         public async Task<User> GetByIdAsync(int Id)
+=======
+        public Task<User> GetByIdAsync()
+>>>>>>> e217a2eb481cdce2fd05e67703387f60b39b7f03
         {
             User? user =await _db.Users.FirstOrDefaultAsync(x=> x.Id == Id);
             if (user == null)
@@ -51,6 +59,11 @@ namespace Pastbin.Infrastructure.Services
             }
             return user;
 
+        }
+
+        public Task<User> GetByUsername(string username)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<User> UpdateAsync(User user)
