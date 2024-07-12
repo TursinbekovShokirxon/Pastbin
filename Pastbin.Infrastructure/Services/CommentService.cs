@@ -10,12 +10,7 @@ namespace Pastbin.Infrastructure.Services
 {
     public class CommentService : ICommentService
     {
-        public Task<string> CreateAsync(Comment entity,int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Comment> CreateAsync(Comment entity)
+        public Task<string> createAsync(Comment comment, int userId)
         {
             throw new NotImplementedException();
         }

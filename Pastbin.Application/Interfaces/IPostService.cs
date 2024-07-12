@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace Pastbin.Application.Interfaces
 {
-    public interface IPostService
+    public interface IPostService:ICRUDService<Post>
     {
         Task<Post> CreateAsync(Post entity,string text);
-        Task<IEnumerable<Post>> GetAllAsync();
-        Task<Post> GetByIdAsync(int id);
-        Task<Post> UpdateAsync(Post entity);
-        Task<bool> DeleteAsync(int id);
     }
 }
