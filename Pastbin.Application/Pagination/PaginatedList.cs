@@ -8,6 +8,18 @@ namespace Pastbin.Application.Pagination
 {
     public class PaginatedList<T>:List<T>
     {
+        /*
+         public ActionResult Index(int? page) {
+        
+            const int pageSize = 10;
+        
+            var upcomingDinners = dinnerRepository.FindUpcomingDinners();
+            var paginatedDinners = new PaginatedList<Dinner>(upcomingDinners, page ?? 0, pageSize);
+        
+            return View(paginatedDinners);
+        }
+        
+         */
         public PaginatedList(IQueryable<T> source, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
