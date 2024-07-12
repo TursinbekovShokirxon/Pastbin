@@ -12,6 +12,6 @@ namespace Pastbin.Domain.Entities
         public string HashUrl{ get; set; }
         public string UrlAWS{ get; set; }
         public User UserId{ get; set; }
-        public List<Comment> Comments{ get; set; }
+        //public List<Comment> Comments{ get; set; }
     }
 }

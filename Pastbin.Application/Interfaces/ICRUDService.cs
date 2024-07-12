@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pastbin.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,8 @@ namespace Pastbin.Application.Interfaces
     {
         Task<T> CreateAsync(T entity);
         Task<IEnumerable<T>> GetAll();
-        Task<T> GetById();
-        Task<T> UpdateAsync(int Id);
+        Task<T> GetById(int Id);
+        Task<T> UpdateAsync(T entity);
         Task<bool> DeleteAsync(int Id);
     }
 }

@@ -1,5 +1,7 @@
-﻿using Pastbin.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Pastbin.Application.Interfaces;
 using Pastbin.Domain.Entities;
+using Pastbin.Infrastructure.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +12,55 @@ namespace Pastbin.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        public Task<User> CreateAsync(User entity)
+        public PastbinDbContext _db;
+        public UserService(PastbinDbContext pastbinDbContext)
         {
-            throw new NotImplementedException();
+            _db = pastbinDbContext;
+        }
+        public async Task<User> CreateAsync(User user)
+        {
+            await _db.Users.AddAsync(user);
+            await _db.SaveChangesAsync();
+            return user;
         }
 
-        public Task<bool> DeleteAsync(int Id)
+        public async Task<bool> DeleteAsync(int Id)
         {
-            throw new NotImplementedException();
+            User? user = await _db.Users.FirstOrDefaultAsync(u => u.Id == Id);
+            if (user == null)
+            {
+                return false;
+            }
+            _db.Remove(user);
+            await _db.SaveChangesAsync();
+            return true;
         }
 
-        public Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _db.Users.ToListAsync();
         }
 
-        public Task<User> GetById()
+        public async Task<User> GetById(int Id)
         {
-            throw new NotImplementedException();
+            User? user =await _db.Users.FirstOrDefaultAsync(x=> x.Id == Id);
+            if (user == null)
+            {
+                throw new Exception($"User with Id {Id} not found.");
+            }
+            return user;
+
         }
 
-        public Task<User> UpdateAsync(int Id)
+        public async Task<User> UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            _db.Users.Update(user);
+            int executeRows = await _db.SaveChangesAsync();
+            if (executeRows > 0)
+            {
+                return user;
+            }
+            throw new Exception($"User with Id {user.Id} not updated.");
         }
     }
 }

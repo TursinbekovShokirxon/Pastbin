@@ -1,5 +1,6 @@
 ﻿using Pastbin.Application.Interfaces;
 using Pastbin.Domain.Entities;
+using Pastbin.Infrastructure.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,13 @@ namespace Pastbin.Infrastructure.Services
 {
     public class PostService : IPostService
     {
+        public PastbinDbContext _db;
+
+        public PostService(PastbinDbContext db)
+        {
+            _db = db;
+        }
+
         public Task<Post> CreateAsync(Post entity)
         {
             throw new NotImplementedException();
@@ -25,12 +33,12 @@ namespace Pastbin.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetById()
+        public Task<Post> GetById(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Post> UpdateAsync(int Id)
+        public Task<Post> UpdateAsync(Post entity)
         {
             throw new NotImplementedException();
         }
