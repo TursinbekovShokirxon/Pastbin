@@ -1,15 +1,17 @@
-﻿using Pastbin.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Pastbin.Application.Interfaces;
 using Pastbin.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pastbin.Infrastructure.DataAccess;
 
 namespace Pastbin.Infrastructure.Services
 {
     public class UserService : IUserService
     {
+        public readonly PastbinDbContext _pastbinDb;
+        public UserService(PastbinDbContext pastbinDb)
+        {
+            _pastbinDb = pastbinDb;
+        }
         public Task<User> CreateAsync(User entity)
         {
             throw new NotImplementedException();
@@ -28,6 +30,12 @@ namespace Pastbin.Infrastructure.Services
         public Task<User> GetByIdAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<User?> GetByUsername(string username)
+        {
+            User? User = await _pastbinDb.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
+            return User;
         }
 
         public Task<User> UpdateAsync(int Id)

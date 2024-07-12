@@ -21,6 +21,7 @@ namespace Pastbin.UI.Controllers
         public async Task<IActionResult> CreatePost(PostDTO postDTO)
         {
             User user = await _userService.GetByUsername(postDTO.UserName);
+
             if (user == null) return NotFound($"User {postDTO.UserName} not found");
 
             Post post=new Post() 
