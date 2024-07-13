@@ -98,11 +98,11 @@ namespace Pastbin.Infrastructure.Services
         public async Task<bool> DeleteFileAsync(string bucketName, string key)
         {
             var bucketExists = await _s3Client.DoesS3BucketExistAsync(bucketName);
-            if (bucketExists!) return false;
+            if (!bucketExists) return false;
 
             var deletedObject = await _s3Client.DeleteObjectAsync(bucketName, key);
 
-            if (deletedObject.HttpStatusCode == System.Net.HttpStatusCode.OK) return true;
+            if (deletedObject.HttpStatusCode==System.Net.HttpStatusCode.OK) return true;
             return false;
         }
 

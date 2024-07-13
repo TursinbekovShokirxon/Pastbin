@@ -48,10 +48,8 @@ namespace Pastbin.Infrastructure.Services
         public async Task<User> GetByUsername(string username)
         {
             User? User = await _db.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
-            if (User == null)
-            {
-                return null;
-            }
+            if (User == null) return null;
+            
             return User;
         }
 

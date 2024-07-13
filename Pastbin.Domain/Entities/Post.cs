@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,11 +12,12 @@ namespace Pastbin.Domain.Entities
 {
     public class Post
     {
-
         public int Id { get; set; }
         public string HashUrl{ get; set; }
         public string UrlAWS{ get; set; }
-
+        public  string fileName { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime EndTime { get; set; }
         public int ExpireHour { get; set; }
         public int UserId { get; set; }
 

@@ -22,29 +22,39 @@ namespace Pastbin.Infrastructure.Services
             byte[] byteArray = Encoding.UTF8.GetBytes(text);
             using (MemoryStream memoryStream = new MemoryStream(byteArray))
             {
-                // Использование MemoryStream для загрузки файла
-                var response = await _fileService.UploadFileAsync("shokir-demo-bucket", memoryStream, "file.txt", entity.ExpireHour, null);
-
-                // Обновление сущности
+                string filename = $"{Guid.NewGuid()}.txt";
+                var response = await _fileService.UploadFileAsync("shokir-demo-bucket", memoryStream, filename, entity.ExpireHour, entity.User.Username);
+                
                 entity.UrlAWS = response.UploadedFilePath;
                 entity.HashUrl = string.Join("", HashGenerator.sha256_hash(response.UploadedFilePath).Select(x => x).Take(40));
+                entity.fileName = filename;
+                entity.CreateTime = DateTime.Now.ToUniversalTime();
+                entity.EndTime = entity.CreateTime.AddHours(entity.ExpireHour).ToUniversalTime();
             }
             await _db.Posts.AddAsync(entity);
             await _db.SaveChangesAsync();
             return entity;
         }
-        public Task<bool> DeleteAsync(int id)
+        public async Task<string> DeleteAsync(string hashUrl, string username)
         {
-            throw new NotImplementedException();
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Username == username);
+            if (user == null) return $"{username} doesn't exist in database";
+
+            var post = await _db.Posts.FirstOrDefaultAsync(x => x.HashUrl == hashUrl);
+
+            bool response = await _fileService.DeleteFileAsync("shokir-demo-bucket", $"{username}/{post.fileName}");
+            if (response) return "Object successfully deleted";
+
+            return "an error occurred while deleting";
         }
 
         public async Task<IEnumerable<Post>> GetAllFromUsernameAsync(string username)
         {
             var user = await _db.Users
-            .Include(u => u.Posts) 
+            .Include(u => u.Posts)
             .FirstOrDefaultAsync(u => u.Username == username);
 
-            if (user == null) return new List<Post>(); 
+            if (user == null) return new List<Post>();
 
             return user.Posts;
         }
@@ -60,6 +70,11 @@ namespace Pastbin.Infrastructure.Services
         }
 
         public Task<Post> UpdateAsync(Post post)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(int Id)
         {
             throw new NotImplementedException();
         }

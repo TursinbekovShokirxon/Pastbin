@@ -5,9 +5,9 @@ using Pastbin.Domain.Models.DTO;
 
 namespace Pastbin.UI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class PostsController:ControllerBase
+    public class PostsController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IPostService _postService;
@@ -17,30 +17,30 @@ namespace Pastbin.UI.Controllers
             _postService = postService;
 
         }
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<IActionResult> CreatePost(PostDTO postDTO)
         {
             User user = await _userService.GetByUsername(postDTO.UserName);
 
             if (user == null) return NotFound($"User {postDTO.UserName} not found");
 
-            Post post=new Post() 
+            Post post = new Post()
             {
-            ExpireHour = postDTO.ExpireHour,
-            User= user,
+                ExpireHour = postDTO.ExpireHour,
+                User = user,
             };
 
-           var response = await _postService.CreateAsync(post,postDTO.Text);
+            var response = await _postService.CreateAsync(post, postDTO.Text);
             return Ok(response.HashUrl);
         }
 
         [HttpGet("{keyword}")]
         public async Task<IActionResult> GetUrlsForKeyword(string keyword)
         {
-            var posts =  _postService.GetAllAsync().Result.ToList();
-                var urls= posts.Where(k => k.HashUrl == keyword)
-                        .Select(k =>k.UrlAWS)
-                        .ToList();
+            var posts = _postService.GetAllAsync().Result.ToList();
+            var urls = posts.Where(k => k.HashUrl == keyword)
+                    .Select(k => k.UrlAWS)
+                    .ToList();
 
             if (urls == null || urls.Count == 0)
             {
@@ -50,18 +50,25 @@ namespace Pastbin.UI.Controllers
             return Ok(urls);
         }
 
-        [HttpGet]
+        [HttpGet("GetAllFromUsername")]
         public async Task<IActionResult> GetAllFromUsernameAsync(string Username)
         {
-            var Posts=await _postService.GetAllFromUsernameAsync(Username);
-            if(Posts==null) return NotFound("in db not exist");
+            var Posts = await _postService.GetAllFromUsernameAsync(Username);
+            if (Posts == null) return NotFound("in db not exist");
             return Ok(Posts);
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAsync()
         {
             return Ok(_postService.GetAllAsync());
         }
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteAsync(string hashUrl, string username)
+        {
+            string result = await _postService.DeleteAsync(hashUrl, username);
+            return Ok(result);
+        }
+
     }
 }
